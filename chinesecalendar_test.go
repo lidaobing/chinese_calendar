@@ -24,9 +24,20 @@ func TestYearInfo2YearDay(t *testing.T) {
     }
 }
 
-func TestA(t *testing.T) {
-    cc := fromOffset(0)
-    if(cc.year != 0) {
-        t.FailNow()
+type fromOffsetTest struct {
+    in int
+    expect *ChineseCalendar 
+}
+
+var fromOffsetTests = []fromOffsetTest {
+    fromOffsetTest{0, &ChineseCalendar{1900, 0, 0, false}},
+}
+
+func TestFromOffset(t *testing.T) {
+    for _, item := range fromOffsetTests {
+        out := fromOffset(item.in)
+        if(! out.Equal(*item.expect)) {
+            t.Errorf("fromOffset(%d) = %s, expect %s", item.in, out, item.expect)
+        }
     }
 }

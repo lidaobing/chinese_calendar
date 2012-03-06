@@ -8,6 +8,12 @@ type ChineseCalendar struct {
 	day int
 	isLeapMonth bool
 }
+func (lhs ChineseCalendar) Equal(rhs ChineseCalendar) bool {
+    return lhs.year == rhs.year &&
+    lhs.month == rhs.month &&
+    lhs.day == rhs.day &&
+    lhs.isLeapMonth == rhs.isLeapMonth
+}
 
 func yearInfos() []int {
 	return []int {
@@ -73,8 +79,21 @@ func yearInfo2yearDay(yearInfo int) int {
     return res
 }
 
+func yearDays() (res []int) {
+    for _, yearInfo := range yearInfos() {
+        res = append(res, yearInfo2yearDay(yearInfo))
+    }
+    return res
+}
+
 func fromOffset(offset int) * ChineseCalendar {
-	return &ChineseCalendar{0, 0, 0, false}
+    for idx, yearDay := range yearDays() {
+        if offset < yearDay {
+            return &ChineseCalendar{1900+idx, 0, 0, false}
+        }
+        offset -= yearDay
+    }
+    return &ChineseCalendar{0, 0, 0, false}
 }
 
 func main() {
