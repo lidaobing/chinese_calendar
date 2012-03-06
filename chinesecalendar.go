@@ -56,6 +56,23 @@ func yearInfos() []int {
         0x0aa50, 0x1b255, 0x06d20, 0x0ada0}            /* 2049 */
 	}
 
+func yearInfo2yearDay(yearInfo int) int {
+    var res = 29 * 12
+    var leap = 0
+    if yearInfo % 16 != 0 {
+        leap = 1
+        res += 29
+    }
+    yearInfo = yearInfo / 16
+    for i := 0; i < 12+leap; i++ {
+        if yearInfo % 2 == 1 {
+            res += 1
+        }
+        yearInfo = yearInfo / 2
+    }
+    return res
+}
+
 func fromOffset(offset int) * ChineseCalendar {
 	return &ChineseCalendar{0, 0, 0, false}
 }
