@@ -1,0 +1,6 @@
+*.sw?
+*.out
+*.6
+_obj
+_test
+_testmain.go
