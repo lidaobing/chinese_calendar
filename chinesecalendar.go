@@ -2,6 +2,13 @@ package chinesecalendar
 
 import fmt "fmt"
 
+type ChineseCalendar struct {
+	year int
+	month int
+	day int
+	isLeapMonth bool
+}
+
 func yearInfos() []int {
 	return []int {
         /* encoding:
@@ -47,7 +54,11 @@ func yearInfos() []int {
         0x1d0b6, 0x0d250, 0x0d520, 0x0dd45, 0x0b5a0,   /* 2040 */
         0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0,   /* 2045 */
         0x0aa50, 0x1b255, 0x06d20, 0x0ada0}            /* 2049 */
-        }
+	}
+
+func fromOffset(offset int) * ChineseCalendar {
+	return &ChineseCalendar{0, 0, 0, false}
+}
 
 func main() {
 	fmt.Printf("hello world")
