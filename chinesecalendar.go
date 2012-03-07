@@ -1,32 +1,33 @@
+// The chinesecalendar package provide support conversion between chinese calendar and time.Time
+//
+// for more information on Chinese Calendar: http://en.wikipedia.org/wiki/Chinese_calendar
 package chinesecalendar
 
 import fmt "fmt"
 
-/**
- * h2. ChineseCalendar
- */
+// ChineseCalendar
 type ChineseCalendar struct {
-	year int
-	month int
-	day int
-	isLeapMonth bool
+	Year int
+	Month int
+	Day int
+	IsLeapMonth bool
 }
 
+// define equal
 func (lhs ChineseCalendar) Equal(rhs ChineseCalendar) bool {
-    return lhs.year == rhs.year &&
-    lhs.month == rhs.month &&
-    lhs.day == rhs.day &&
-    lhs.isLeapMonth == rhs.isLeapMonth
+    return lhs.Year == rhs.Year &&
+    lhs.Month == rhs.Month &&
+    lhs.Day == rhs.Day &&
+    lhs.IsLeapMonth == rhs.IsLeapMonth
 }
 
-/**
- * h2. YearInfo
- */
+// the information of one year
 type YearInfo struct {
-    year int
+    Year int
     info int
 }
 
+// return the total days of the year
 func (self YearInfo) TotalDays() int {
     var res = 29 * 12
     var leap = 0
@@ -43,6 +44,39 @@ func (self YearInfo) TotalDays() int {
         yearInfo = yearInfo / 2
     }
     return res
+}
+
+// TODO: if month < 1 or month > 12, should raise error
+func (self YearInfo) MonthDays(month int, isLeapMonth bool) int {
+    if isLeapMonth {
+        if (self.info & 0xF) != month {
+            return 0
+        }
+        if ((self.info & 0x10000) != 0) {
+            return 30
+        } else {
+            return 29
+        }
+    } else {
+        if ((self.info & (1 << uint(16 - month))) != 0) {
+            return 30
+        } else {
+            return 29
+        }
+    }
+    return 0 // never reach
+}
+
+// return the idx-th day in this year
+// if idx < 0 or idx > TotalDays(), return nil
+func (self YearInfo) Day(idx int) *ChineseCalendar {
+    if(idx < 0 || idx > self.TotalDays()) {
+        return nil
+    }
+    var month = 1
+    var day = 1
+    var isLeapMonth = false
+    return &ChineseCalendar {Year: self.Year, Month: month, Day: day, IsLeapMonth: isLeapMonth}
 }
 
 func yearInfos() []int {
