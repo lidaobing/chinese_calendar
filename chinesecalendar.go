@@ -2,17 +2,47 @@ package chinesecalendar
 
 import fmt "fmt"
 
+/**
+ * h2. ChineseCalendar
+ */
 type ChineseCalendar struct {
 	year int
 	month int
 	day int
 	isLeapMonth bool
 }
+
 func (lhs ChineseCalendar) Equal(rhs ChineseCalendar) bool {
     return lhs.year == rhs.year &&
     lhs.month == rhs.month &&
     lhs.day == rhs.day &&
     lhs.isLeapMonth == rhs.isLeapMonth
+}
+
+/**
+ * h2. YearInfo
+ */
+type YearInfo struct {
+    year int
+    info int
+}
+
+func (self YearInfo) TotalDays() int {
+    var res = 29 * 12
+    var leap = 0
+    var yearInfo = self.info
+    if yearInfo % 16 != 0 {
+        leap = 1
+        res += 29
+    }
+    yearInfo = yearInfo / 16
+    for i := 0; i < 12+leap; i++ {
+        if yearInfo % 2 == 1 {
+            res += 1
+        }
+        yearInfo = yearInfo / 2
+    }
+    return res
 }
 
 func yearInfos() []int {
@@ -62,26 +92,9 @@ func yearInfos() []int {
         0x0aa50, 0x1b255, 0x06d20, 0x0ada0}            /* 2049 */
 	}
 
-func yearInfo2yearDay(yearInfo int) int {
-    var res = 29 * 12
-    var leap = 0
-    if yearInfo % 16 != 0 {
-        leap = 1
-        res += 29
-    }
-    yearInfo = yearInfo / 16
-    for i := 0; i < 12+leap; i++ {
-        if yearInfo % 2 == 1 {
-            res += 1
-        }
-        yearInfo = yearInfo / 2
-    }
-    return res
-}
-
 func yearDays() (res []int) {
     for _, yearInfo := range yearInfos() {
-        res = append(res, yearInfo2yearDay(yearInfo))
+        res = append(res, YearInfo{info:yearInfo}.TotalDays())
     }
     return res
 }

@@ -15,18 +15,18 @@ var yearInfo2YearDayTests = []yearInfo2YearDayTest {
     yearInfo2YearDayTest{(1<<12-1)*16+1, 389}, // 1 leap month, and every normal month has 30 days, and leap month has 29 days.
 }
 
-func TestYearInfo2YearDay(t *testing.T) {
+func TestYearInfo_TotalDays(t *testing.T) {
     for _, dt := range yearInfo2YearDayTests {
-        v := yearInfo2yearDay(dt.in)
+        v := YearInfo{1900, dt.in}.TotalDays()
         if(v != dt.out) {
-            t.Errorf("yearInfo2yearDay(%d) = %d, expect %d.", dt.in, v, dt.out)
+            t.Errorf("YearInfo{info:%d}.TotalDays() = %d, expect %d.", dt.in, v, dt.out)
         }
     }
 }
 
 type fromOffsetTest struct {
     in int
-    expect *ChineseCalendar 
+    expect *ChineseCalendar
 }
 
 var fromOffsetTests = []fromOffsetTest {
