@@ -111,17 +111,14 @@ func TestChineseCalendar_After(t *testing.T) {
 }
 
 func TestChineseCalendar_NextDay(t *testing.T) {
-	d, err := ChineseCalendar{1982, 11, 20, false}.NextDay()
-	assert.NoError(t, err)
+	d := ChineseCalendar{1982, 11, 20, false}.NextDay()
 	assert.Equal(t, d, ChineseCalendar{1982, 11, 21, false})
 }
 
 func TestChineseCalendar_PrevDay(t *testing.T) {
-	d, err := ChineseCalendar{1982, 11, 1, false}.PrevDay()
-	assert.NoError(t, err)
+	d := ChineseCalendar{1982, 11, 1, false}.PrevDay()
 	assert.Equal(t, d, ChineseCalendar{1982, 10, 30, false})
-	d, err = ChineseCalendar{1976, 9, 1, false}.PrevDay()
-	assert.NoError(t, err)
+	d = ChineseCalendar{1976, 9, 1, false}.PrevDay()
 	assert.Equal(t, d, ChineseCalendar{1976, 8, 29, true})
 
 }

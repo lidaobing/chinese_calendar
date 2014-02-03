@@ -1,6 +1,8 @@
 // The chinesecalendar package provide support conversion between chinese calendar and time.Time
 //
 // for more information on Chinese Calendar: http://en.wikipedia.org/wiki/Chinese_calendar
+//
+// https://github.com/lidaobing/gochinesecalendar
 package chinesecalendar
 
 import (
@@ -70,12 +72,12 @@ func (c ChineseCalendar) After(u ChineseCalendar) bool {
 	return c.MustToTime().After(u.MustToTime())
 }
 
-func (c ChineseCalendar) NextDay() (res ChineseCalendar, err error) {
-	return FromTime(c.MustToTime().AddDate(0, 0, 1))
+func (c ChineseCalendar) NextDay() (res ChineseCalendar) {
+	return MustFromTime(c.MustToTime().AddDate(0, 0, 1))
 }
 
-func (c ChineseCalendar) PrevDay() (res ChineseCalendar, err error) {
-	return FromTime(c.MustToTime().AddDate(0, 0, -1))
+func (c ChineseCalendar) PrevDay() (res ChineseCalendar) {
+	return MustFromTime(c.MustToTime().AddDate(0, 0, -1))
 }
 
 type yearInfoItem struct {
@@ -102,7 +104,6 @@ func FromTime(t time.Time) (res ChineseCalendar, err error) {
 		return
 	}
 	days := int(floatDays + 0.5)
-	fmt.Println(t, days)
 	if days > 54778 {
 		err = ErrTimeOutOfRange
 		return
