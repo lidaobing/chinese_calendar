@@ -22,7 +22,7 @@ var yearInfo2YearDayTests = []yearInfo2YearDayTest{
 
 func TestYearInfo_TotalDays(t *testing.T) {
 	for _, dt := range yearInfo2YearDayTests {
-		v := YearInfo{1900, dt.in}.TotalDays()
+		v := yearInfo{1900, dt.in}.TotalDays()
 		if v != dt.out {
 			t.Errorf("YearInfo{info:%d}.TotalDays() = %d, expect %d.", dt.in, v, dt.out)
 		}

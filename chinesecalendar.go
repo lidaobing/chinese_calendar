@@ -70,13 +70,13 @@ func (lhs ChineseCalendar) Equal(rhs ChineseCalendar) bool {
 }
 
 // the information of one year
-type YearInfo struct {
+type yearInfo struct {
 	Year int
 	info int
 }
 
 // return the total days of the year
-func (self YearInfo) TotalDays() int {
+func (self yearInfo) TotalDays() int {
 	var res = 29 * 12
 	var leap = 0
 	var yearInfo = self.info
@@ -95,7 +95,7 @@ func (self YearInfo) TotalDays() int {
 }
 
 // TODO: if month < 1 or month > 12, should raise error
-func (self YearInfo) MonthDays(month int, isLeapMonth bool) int {
+func (self yearInfo) MonthDays(month int, isLeapMonth bool) int {
 	if isLeapMonth {
 		if (self.info & 0xF) != month {
 			return 0
@@ -117,7 +117,7 @@ func (self YearInfo) MonthDays(month int, isLeapMonth bool) int {
 
 // return the idx-th day in this year
 // if idx < 0 or idx > TotalDays(), return nil
-func (self YearInfo) Day(idx int) *ChineseCalendar {
+func (self yearInfo) Day(idx int) *ChineseCalendar {
 	if idx < 0 || idx > self.TotalDays() {
 		return nil
 	}
@@ -175,8 +175,8 @@ func calcYearInfos() []int {
 }
 
 func calcYearDays() (res []int) {
-	for _, yearInfo := range yearInfos {
-		res = append(res, YearInfo{info: yearInfo}.TotalDays())
+	for _, yi := range yearInfos {
+		res = append(res, yearInfo{info: yi}.TotalDays())
 	}
 	return res
 }
