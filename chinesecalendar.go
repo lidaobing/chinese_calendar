@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-var (
-	startDate = time.Date(1900, time.January, 31, 0, 0, 0, 0, time.UTC)
-)
-
 // ChineseCalendar
 type ChineseCalendar struct {
 	Year        int
@@ -27,7 +23,7 @@ func (c ChineseCalendar) ToSolarDate() time.Time {
 	}
 	yearIdx := c.Year - 1900
 	for i := 0; i < yearIdx; i++ {
-		offset += yearDays()[i]
+		offset += yearDays[i]
 	}
 
 	offset += calcDays(yearInfos[yearIdx], c.Month, c.Day, c.IsLeapMonth)
@@ -131,8 +127,8 @@ func (self YearInfo) Day(idx int) *ChineseCalendar {
 	return &ChineseCalendar{Year: self.Year, Month: month, Day: day, IsLeapMonth: isLeapMonth}
 }
 
-var (
-	yearInfos = []int{
+func calcYearInfos() []int {
+	return []int{
 		/* encoding:
 		              b bbbbbbbbbbbb bbbb
 		      bit#    1 111111000000 0000
@@ -176,9 +172,9 @@ var (
 		0x1d0b6, 0x0d250, 0x0d520, 0x0dd45, 0x0b5a0, /* 2040 */
 		0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, /* 2045 */
 		0x0aa50, 0x1b255, 0x06d20, 0x0ada0} /* 2049 */
-)
+}
 
-func yearDays() (res []int) {
+func calcYearDays() (res []int) {
 	for _, yearInfo := range yearInfos {
 		res = append(res, YearInfo{info: yearInfo}.TotalDays())
 	}
@@ -191,7 +187,7 @@ func fromOffset(offset int) (res ChineseCalendar, err error) {
 		return
 	}
 	var yearInfo int
-	for idx, yearDay := range yearDays() {
+	for idx, yearDay := range yearDays {
 		if offset < yearDay {
 			res.Year = 1900 + idx
 			yearInfo = yearInfos[idx]
@@ -260,6 +256,8 @@ func enumMonth(yearInfo int) (res []yearInfoItem) {
 	return
 }
 
-func main() {
-	fmt.Printf("hello world")
-}
+var (
+	startDate = time.Date(1900, time.January, 31, 0, 0, 0, 0, time.UTC)
+	yearInfos = calcYearInfos()
+	yearDays  = calcYearDays()
+)
