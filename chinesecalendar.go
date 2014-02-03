@@ -48,7 +48,7 @@ func (c ChineseCalendar) ToTime() (res time.Time, err error) {
 		return
 	}
 	offset += days
-	res = startDate.AddDate(0, 0, offset)
+	res = startDate().AddDate(0, 0, offset)
 	return
 }
 
@@ -89,7 +89,7 @@ func FromSolarDate(year, month, day int) (res ChineseCalendar, err error) {
 	if err != nil {
 		return
 	}
-	days := int(t.Sub(startDate).Hours()/24 + 0.5)
+	days := int(t.Sub(startDate()).Hours()/24 + 0.5)
 	return fromOffset(days)
 }
 
@@ -300,8 +300,11 @@ func enumMonth(yearInfo int) (res []yearInfoItem) {
 	return
 }
 
+func startDate() time.Time {
+	return time.Date(1900, time.January, 31, 0, 0, 0, 0, time.Local)
+}
+
 var (
-	startDate = time.Date(1900, time.January, 31, 0, 0, 0, 0, time.UTC)
 	yearInfos = calcYearInfos()
 	yearDays  = calcYearDays()
 )

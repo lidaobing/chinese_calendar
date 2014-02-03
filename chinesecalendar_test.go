@@ -84,6 +84,14 @@ func TestChineseCalendar_ToTime(t *testing.T) {
 		ChineseCalendar{1976, 8, 8, true}.MustToTime().Format("2006-01-02"),
 		"1976-10-01",
 	)
+	oldLocal := time.Local
+	local, err := time.LoadLocation("Asia/Shanghai")
+	time.Local = local
+	assert.NoError(t, err)
+	name, offset := ChineseCalendar{1976, 8, 8, true}.MustToTime().Zone()
+	assert.Equal(t, name, "CST")
+	assert.Equal(t, offset, 8*3600)
+	time.Local = oldLocal
 }
 
 func TestChineseCalendar_Before(t *testing.T) {
