@@ -58,6 +58,21 @@ func FromSolarDate(year, month, day int) (res ChineseCalendar, err error) {
 	return fromOffset(days)
 }
 
+func FromTime(t time.Time) (res ChineseCalendar, err error) {
+	return FromSolarDate(
+		t.Year(),
+		int(t.Month()),
+		t.Day())
+}
+
+func Today() (res ChineseCalendar) {
+	res, err := FromTime(time.Now())
+	if err != nil {
+		panic(err)
+	}
+	return
+}
+
 // define equal
 func (lhs ChineseCalendar) Equal(rhs ChineseCalendar) bool {
 	return lhs.Year == rhs.Year &&

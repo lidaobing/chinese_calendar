@@ -2,6 +2,7 @@ package chinesecalendar
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -58,4 +59,17 @@ func TestChineseCalendar_ToSolarDate(t *testing.T) {
 		ChineseCalendar{1976, 8, 8, true}.ToSolarDate().Format("2006-01-02"),
 		"1976-10-01",
 	)
+}
+
+func TestFromTime(t *testing.T) {
+	t1 := time.Date(2014, time.February, 14, 0, 0, 0, 0, time.Local)
+
+	t2, err := FromTime(t1)
+	assert.NoError(t, err)
+	assert.Equal(t, t2, ChineseCalendar{2014, 1, 15, false})
+}
+
+func TestToday(t *testing.T) {
+	c := Today()
+	assert.NotNil(t, c)
 }
