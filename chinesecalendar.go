@@ -30,6 +30,14 @@ func (c ChineseCalendar) ToSolarDate() time.Time {
 	return startDate.AddDate(0, 0, offset)
 }
 
+func (c ChineseCalendar) Before(u ChineseCalendar) bool {
+	return c.ToSolarDate().Before(u.ToSolarDate())
+}
+
+func (c ChineseCalendar) After(u ChineseCalendar) bool {
+	return c.ToSolarDate().After(u.ToSolarDate())
+}
+
 type yearInfoItem struct {
 	Month       int
 	Days        int

@@ -59,12 +59,22 @@ func TestChineseCalendar_ToSolarDate(t *testing.T) {
 	)
 }
 
+func TestChineseCalendar_Before(t *testing.T) {
+	assert.True(t,
+		ChineseCalendar{1982, 11, 20, false}.Before(ChineseCalendar{1982, 11, 21, false}))
+}
+
+func TestChineseCalendar_After(t *testing.T) {
+	assert.False(t,
+		ChineseCalendar{1982, 11, 20, false}.After(ChineseCalendar{1982, 11, 21, false}))
+}
+
 func TestFromTime(t *testing.T) {
-	t1 := time.Date(2014, time.February, 14, 0, 0, 0, 0, time.Local)
+	t1 := time.Date(1983, time.January, 3, 0, 0, 0, 0, time.Local)
 
 	t2, err := FromTime(t1)
 	assert.NoError(t, err)
-	assert.Equal(t, t2, ChineseCalendar{2014, 1, 15, false})
+	assert.Equal(t, t2, ChineseCalendar{1982, 11, 20, false})
 }
 
 func TestToday(t *testing.T) {
