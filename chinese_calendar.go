@@ -3,7 +3,7 @@
 // for more information on Chinese Calendar: http://en.wikipedia.org/wiki/Chinese_calendar
 //
 // https://github.com/lidaobing/gochinesecalendar
-package chinesecalendar
+package chinese_calendar
 
 import (
 	"errors"

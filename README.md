@@ -1,9 +1,11 @@
 # A Chinese Calendar Library in Golang
 
+https://github.com/lidaobing/chinese_calendar
+
 ## Install
 
 ```
-go get -u github.com/lidaobing/gochinesecalendar
+go get -u github.com/lidaobing/chinese_calendar
 ```
 
 ## Usage
@@ -15,7 +17,7 @@ import (
   "fmt"
   "time"
 
-  cc "github.com/lidaobing/gochinesecalendar"
+  cc "github.com/lidaobing/chinese_calendar"
 )
 
 func main() {

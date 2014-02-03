@@ -1,4 +1,4 @@
-package chinesecalendar
+package chinese_calendar
 
 import (
 	"testing"
