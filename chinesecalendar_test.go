@@ -84,6 +84,7 @@ func TestChineseCalendar_ToTime(t *testing.T) {
 		ChineseCalendar{1976, 8, 8, true}.MustToTime().Format("2006-01-02"),
 		"1976-10-01",
 	)
+
 	oldLocal := time.Local
 	local, err := time.LoadLocation("Asia/Shanghai")
 	time.Local = local
@@ -92,6 +93,11 @@ func TestChineseCalendar_ToTime(t *testing.T) {
 	assert.Equal(t, name, "CST")
 	assert.Equal(t, offset, 8*3600)
 	time.Local = oldLocal
+
+	assert.Equal(t,
+		ChineseCalendar{2049, 12, 29, false}.MustToTime().Format("2006-01-02"),
+		"2050-01-22",
+	)
 }
 
 func TestChineseCalendar_Before(t *testing.T) {
@@ -121,11 +127,26 @@ func TestChineseCalendar_PrevDay(t *testing.T) {
 }
 
 func TestFromTime(t *testing.T) {
-	t1 := time.Date(1983, time.January, 3, 0, 0, 0, 0, time.Local)
+	t1, err := FromTime(time.Date(1900, time.January, 30, 0, 0, 0, 0, time.Local))
+	assert.Equal(t, err, ErrTimeOutOfRange)
 
-	t2, err := FromTime(t1)
-	assert.NoError(t, err)
-	assert.Equal(t, t2, ChineseCalendar{1982, 11, 20, false})
+	t1, err = FromTime(time.Date(1900, time.January, 30, 23, 59, 0, 0, time.Local))
+	assert.Equal(t, err, ErrTimeOutOfRange)
+
+	t1 = MustFromTime(time.Date(1900, time.January, 31, 0, 0, 0, 0, time.Local))
+	assert.Equal(t, t1, ChineseCalendar{1900, 1, 1, false})
+
+	t1 = MustFromTime(time.Date(1983, time.January, 3, 0, 0, 0, 0, time.Local))
+	assert.Equal(t, t1, ChineseCalendar{1982, 11, 20, false})
+
+	t1 = MustFromTime(time.Date(2050, time.January, 22, 0, 0, 0, 0, time.Local))
+	assert.Equal(t, t1, ChineseCalendar{2049, 12, 29, false})
+
+	t1 = MustFromTime(time.Date(2050, time.January, 22, 23, 59, 59, 0, time.Local))
+	assert.Equal(t, t1, ChineseCalendar{2049, 12, 29, false})
+
+	t1, err = FromTime(time.Date(2050, time.January, 23, 0, 0, 0, 0, time.Local))
+	assert.Equal(t, err, ErrTimeOutOfRange)
 }
 
 func TestToday(t *testing.T) {

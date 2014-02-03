@@ -14,6 +14,7 @@ var (
 	ErrMonthOutOfRange = errors.New("month out of range [1, 12]")
 	ErrNotLeapMonth    = errors.New("this month is not a leap month")
 	ErrDayOutOfRange   = errors.New("day out of range")
+	ErrTimeOutOfRange  = errors.New("time out of range [1900-01-31, 2050-01-22]")
 )
 
 // ChineseCalendar
@@ -48,7 +49,7 @@ func (c ChineseCalendar) ToTime() (res time.Time, err error) {
 		return
 	}
 	offset += days
-	res = startDate().AddDate(0, 0, offset)
+	res = startDate(time.Local).AddDate(0, 0, offset)
 	return
 }
 
@@ -89,15 +90,32 @@ func FromSolarDate(year, month, day int) (res ChineseCalendar, err error) {
 	if err != nil {
 		return
 	}
-	days := int(t.Sub(startDate()).Hours()/24 + 0.5)
-	return fromOffset(days)
+	return FromTime(t)
 }
 
 func FromTime(t time.Time) (res ChineseCalendar, err error) {
-	return FromSolarDate(
-		t.Year(),
-		int(t.Month()),
-		t.Day())
+	// reset to begin of day, a workaround for the leap second problem
+	t = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+	floatDays := t.Sub(startDate(t.Location())).Hours() / 24
+	if floatDays < 0 {
+		err = ErrTimeOutOfRange
+		return
+	}
+	days := int(floatDays + 0.5)
+	fmt.Println(t, days)
+	if days > 54778 {
+		err = ErrTimeOutOfRange
+		return
+	}
+	return fromOffset(days)
+}
+
+func MustFromTime(t time.Time) (res ChineseCalendar) {
+	res, err := FromTime(t)
+	if err != nil {
+		panic(err)
+	}
+	return
 }
 
 func Today() (res ChineseCalendar) {
@@ -300,8 +318,8 @@ func enumMonth(yearInfo int) (res []yearInfoItem) {
 	return
 }
 
-func startDate() time.Time {
-	return time.Date(1900, time.January, 31, 0, 0, 0, 0, time.Local)
+func startDate(l *time.Location) time.Time {
+	return time.Date(1900, time.January, 31, 0, 0, 0, 0, l)
 }
 
 var (
