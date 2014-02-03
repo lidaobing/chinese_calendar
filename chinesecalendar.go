@@ -9,16 +9,8 @@ import (
 )
 
 var (
-	startDate time.Time
+	startDate = time.Date(1900, time.January, 31, 0, 0, 0, 0, time.UTC)
 )
-
-func init() {
-	var err error
-	startDate, err = time.Parse("2006-01-02", "1900-01-31")
-	if err != nil {
-		panic(err)
-	}
-}
 
 // ChineseCalendar
 type ChineseCalendar struct {
