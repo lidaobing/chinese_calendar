@@ -3,6 +3,7 @@
 https://github.com/lidaobing/chinese_calendar
 
 [![Build Status](https://travis-ci.org/lidaobing/chinese_calendar.png?branch=master)](https://travis-ci.org/lidaobing/chinese_calendar)
+[![GitHub version](https://badge.fury.io/gh/lidaobing%2Fchinese_calendar.png)](http://badge.fury.io/gh/lidaobing%2Fchinese_calendar)
 
 
 ## Install

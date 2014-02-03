@@ -152,27 +152,6 @@ func (self yearInfo) TotalDays() int {
 	return res
 }
 
-// TODO: if month < 1 or month > 12, should raise error
-func (self yearInfo) MonthDays(month int, isLeapMonth bool) int {
-	if isLeapMonth {
-		if (self.info & 0xF) != month {
-			return 0
-		}
-		if (self.info & 0x10000) != 0 {
-			return 30
-		} else {
-			return 29
-		}
-	} else {
-		if (self.info & (1 << uint(16-month))) != 0 {
-			return 30
-		} else {
-			return 29
-		}
-	}
-	return 0 // never reach
-}
-
 // return the idx-th day in this year
 // if idx < 0 or idx > TotalDays(), return nil
 func (self yearInfo) Day(idx int) *ChineseCalendar {
