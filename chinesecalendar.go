@@ -38,6 +38,14 @@ func (c ChineseCalendar) After(u ChineseCalendar) bool {
 	return c.ToSolarDate().After(u.ToSolarDate())
 }
 
+func (c ChineseCalendar) NextDay() (res ChineseCalendar, err error) {
+	return FromTime(c.ToSolarDate().AddDate(0, 0, 1))
+}
+
+func (c ChineseCalendar) PrevDay() (res ChineseCalendar, err error) {
+	return FromTime(c.ToSolarDate().AddDate(0, 0, -1))
+}
+
 type yearInfoItem struct {
 	Month       int
 	Days        int
