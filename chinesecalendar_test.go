@@ -31,20 +31,18 @@ func TestYearInfo_TotalDays(t *testing.T) {
 
 type fromOffsetTest struct {
 	in     int
-	expect *ChineseCalendar
+	expect ChineseCalendar
 }
 
 var fromOffsetTests = []fromOffsetTest{
-	fromOffsetTest{0, &ChineseCalendar{1900, 1, 1, false}},
+	fromOffsetTest{0, ChineseCalendar{1900, 1, 1, false}},
 }
 
 func TestFromOffset(t *testing.T) {
 	for _, item := range fromOffsetTests {
 		out, err := fromOffset(item.in)
 		assert.NoError(t, err)
-		if !out.Equal(*item.expect) {
-			t.Errorf("fromOffset(%d) = %s, expect %s", item.in, out, item.expect)
-		}
+		assert.Equal(t, out, item.expect)
 	}
 }
 

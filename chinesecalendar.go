@@ -61,14 +61,6 @@ func Today() (res ChineseCalendar) {
 	return
 }
 
-// define equal
-func (lhs ChineseCalendar) Equal(rhs ChineseCalendar) bool {
-	return lhs.Year == rhs.Year &&
-		lhs.Month == rhs.Month &&
-		lhs.Day == rhs.Day &&
-		lhs.IsLeapMonth == rhs.IsLeapMonth
-}
-
 // the information of one year
 type yearInfo struct {
 	Year int
