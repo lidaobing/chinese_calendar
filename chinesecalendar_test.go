@@ -79,9 +79,9 @@ func TestChineseCalendar_Validate(t *testing.T) {
 	assert.Equal(t, ChineseCalendar{1900, 12, 1, false}.Validate(), nil)
 	assert.Equal(t, ChineseCalendar{1900, 13, 1, false}.Validate(), ErrMonthOutOfRange)
 }
-func TestChineseCalendar_ToSolarDate(t *testing.T) {
+func TestChineseCalendar_ToTime(t *testing.T) {
 	assert.Equal(t,
-		ChineseCalendar{1976, 8, 8, true}.MustToSolarDate().Format("2006-01-02"),
+		ChineseCalendar{1976, 8, 8, true}.MustToTime().Format("2006-01-02"),
 		"1976-10-01",
 	)
 }

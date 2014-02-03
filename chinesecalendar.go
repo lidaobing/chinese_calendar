@@ -24,15 +24,15 @@ type ChineseCalendar struct {
 	IsLeapMonth bool
 }
 
-func (c ChineseCalendar) MustToSolarDate() time.Time {
-	res, err := c.ToSolarDate()
+func (c ChineseCalendar) MustToTime() time.Time {
+	res, err := c.ToTime()
 	if err != nil {
 		panic(err)
 	}
 	return res
 }
 
-func (c ChineseCalendar) ToSolarDate() (res time.Time, err error) {
+func (c ChineseCalendar) ToTime() (res time.Time, err error) {
 	offset := 0
 	if c.Year < 1900 || c.Year >= 2050 {
 		return res, ErrYearOutOfRange
@@ -53,7 +53,7 @@ func (c ChineseCalendar) ToSolarDate() (res time.Time, err error) {
 }
 
 func (c ChineseCalendar) Validate() (err error) {
-	_, err = c.ToSolarDate()
+	_, err = c.ToTime()
 	return
 }
 
@@ -62,19 +62,19 @@ func (c ChineseCalendar) IsValid() bool {
 }
 
 func (c ChineseCalendar) Before(u ChineseCalendar) bool {
-	return c.MustToSolarDate().Before(u.MustToSolarDate())
+	return c.MustToTime().Before(u.MustToTime())
 }
 
 func (c ChineseCalendar) After(u ChineseCalendar) bool {
-	return c.MustToSolarDate().After(u.MustToSolarDate())
+	return c.MustToTime().After(u.MustToTime())
 }
 
 func (c ChineseCalendar) NextDay() (res ChineseCalendar, err error) {
-	return FromTime(c.MustToSolarDate().AddDate(0, 0, 1))
+	return FromTime(c.MustToTime().AddDate(0, 0, 1))
 }
 
 func (c ChineseCalendar) PrevDay() (res ChineseCalendar, err error) {
-	return FromTime(c.MustToSolarDate().AddDate(0, 0, -1))
+	return FromTime(c.MustToTime().AddDate(0, 0, -1))
 }
 
 type yearInfoItem struct {
