@@ -2,6 +2,8 @@
 
 https://github.com/lidaobing/chinese_calendar
 
+[![Build Status](https://travis-ci.org/lidaobing/chinese_calendar.png?branch=master)](https://travis-ci.org/lidaobing/chinese_calendar)
+
 
 ## Install
 
