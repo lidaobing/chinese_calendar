@@ -52,3 +52,10 @@ func TestFromSolarDate(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, t1, ChineseCalendar{1976, 8, 8, true})
 }
+
+func TestChineseCalendar_ToSolarDate(t *testing.T) {
+	assert.Equal(t,
+		ChineseCalendar{1976, 8, 8, true}.ToSolarDate().Format("2006-01-02"),
+		"1976-10-01",
+	)
+}

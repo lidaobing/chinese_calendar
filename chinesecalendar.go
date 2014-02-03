@@ -28,6 +28,20 @@ type ChineseCalendar struct {
 	IsLeapMonth bool
 }
 
+func (c ChineseCalendar) ToSolarDate() time.Time {
+	offset := 0
+	if c.Year < 1900 || c.Year >= 2050 {
+		panic("year out of range [1900, 2050)")
+	}
+	yearIdx := c.Year - 1900
+	for i := 0; i < yearIdx; i++ {
+		offset += yearDays()[i]
+	}
+
+	offset += calcDays(yearInfos[yearIdx], c.Month, c.Day, c.IsLeapMonth)
+	return startDate.AddDate(0, 0, offset)
+}
+
 type yearInfoItem struct {
 	Month       int
 	Days        int
@@ -200,6 +214,18 @@ func calcMonthDay(yearInfo, offset int) (month, day int, isLeapMonth bool) {
 		offset -= yii.Days
 	}
 	panic("offset too large for the yearInfo")
+	return
+}
+
+func calcDays(yearInfo, month, day int, isLeapMonth bool) (offset int) {
+	for _, yii := range enumMonth(yearInfo) {
+		if month == yii.Month && isLeapMonth == yii.IsLeapMonth {
+			offset += day - 1
+			return
+		}
+		offset += yii.Days
+	}
+	panic("invalid param")
 	return
 }
 
