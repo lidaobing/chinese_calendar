@@ -52,9 +52,36 @@ func TestFromSolarDate(t *testing.T) {
 	assert.Equal(t, t1, ChineseCalendar{1976, 8, 8, true})
 }
 
+func TestChineseCalendar_Validate(t *testing.T) {
+	assert.Equal(t, ChineseCalendar{1899, 12, 29, false}.Validate(), ErrYearOutOfRange)
+	assert.Equal(t, ChineseCalendar{1899, 12, 30, false}.Validate(), ErrYearOutOfRange)
+	assert.Equal(t, ChineseCalendar{1900, 1, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{2049, 1, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{2050, 1, 1, false}.Validate(), ErrYearOutOfRange)
+	assert.Equal(t, ChineseCalendar{2051, 1, 1, false}.Validate(), ErrYearOutOfRange)
+
+	assert.Equal(t, ChineseCalendar{1900, 1, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 1, 1, true}.Validate(), ErrNotLeapMonth)
+	assert.Equal(t, ChineseCalendar{1976, 8, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1976, 8, 1, true}.Validate(), nil)
+
+	assert.Equal(t, ChineseCalendar{1900, 1, -1, false}.Validate(), ErrDayOutOfRange)
+	assert.Equal(t, ChineseCalendar{1900, 1, 0, false}.Validate(), ErrDayOutOfRange)
+	assert.Equal(t, ChineseCalendar{1900, 1, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 1, 29, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 1, 30, false}.Validate(), ErrDayOutOfRange)
+	assert.Equal(t, ChineseCalendar{1900, 2, 29, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 2, 30, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 2, 31, false}.Validate(), ErrDayOutOfRange)
+
+	assert.Equal(t, ChineseCalendar{1900, 0, 1, false}.Validate(), ErrMonthOutOfRange)
+	assert.Equal(t, ChineseCalendar{1900, 1, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 12, 1, false}.Validate(), nil)
+	assert.Equal(t, ChineseCalendar{1900, 13, 1, false}.Validate(), ErrMonthOutOfRange)
+}
 func TestChineseCalendar_ToSolarDate(t *testing.T) {
 	assert.Equal(t,
-		ChineseCalendar{1976, 8, 8, true}.ToSolarDate().Format("2006-01-02"),
+		ChineseCalendar{1976, 8, 8, true}.MustToSolarDate().Format("2006-01-02"),
 		"1976-10-01",
 	)
 }

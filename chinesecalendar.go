@@ -4,8 +4,16 @@
 package chinesecalendar
 
 import (
+	"errors"
 	"fmt"
 	"time"
+)
+
+var (
+	ErrYearOutOfRange  = errors.New("year out of range [1900, 2050)")
+	ErrMonthOutOfRange = errors.New("month out of range [1, 12]")
+	ErrNotLeapMonth    = errors.New("this month is not a leap month")
+	ErrDayOutOfRange   = errors.New("day out of range")
 )
 
 // ChineseCalendar
@@ -16,34 +24,57 @@ type ChineseCalendar struct {
 	IsLeapMonth bool
 }
 
-func (c ChineseCalendar) ToSolarDate() time.Time {
+func (c ChineseCalendar) MustToSolarDate() time.Time {
+	res, err := c.ToSolarDate()
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
+
+func (c ChineseCalendar) ToSolarDate() (res time.Time, err error) {
 	offset := 0
 	if c.Year < 1900 || c.Year >= 2050 {
-		panic("year out of range [1900, 2050)")
+		return res, ErrYearOutOfRange
 	}
 	yearIdx := c.Year - 1900
 	for i := 0; i < yearIdx; i++ {
 		offset += yearDays[i]
 	}
 
-	offset += calcDays(yearInfos[yearIdx], c.Month, c.Day, c.IsLeapMonth)
-	return startDate.AddDate(0, 0, offset)
+	var days int
+	days, err = calcDays(yearInfos[yearIdx], c.Month, c.Day, c.IsLeapMonth)
+	if err != nil {
+		return
+	}
+	offset += days
+	res = startDate.AddDate(0, 0, offset)
+	return
+}
+
+func (c ChineseCalendar) Validate() (err error) {
+	_, err = c.ToSolarDate()
+	return
+}
+
+func (c ChineseCalendar) IsValid() bool {
+	return c.Validate() == nil
 }
 
 func (c ChineseCalendar) Before(u ChineseCalendar) bool {
-	return c.ToSolarDate().Before(u.ToSolarDate())
+	return c.MustToSolarDate().Before(u.MustToSolarDate())
 }
 
 func (c ChineseCalendar) After(u ChineseCalendar) bool {
-	return c.ToSolarDate().After(u.ToSolarDate())
+	return c.MustToSolarDate().After(u.MustToSolarDate())
 }
 
 func (c ChineseCalendar) NextDay() (res ChineseCalendar, err error) {
-	return FromTime(c.ToSolarDate().AddDate(0, 0, 1))
+	return FromTime(c.MustToSolarDate().AddDate(0, 0, 1))
 }
 
 func (c ChineseCalendar) PrevDay() (res ChineseCalendar, err error) {
-	return FromTime(c.ToSolarDate().AddDate(0, 0, -1))
+	return FromTime(c.MustToSolarDate().AddDate(0, 0, -1))
 }
 
 type yearInfoItem struct {
@@ -228,16 +259,21 @@ func calcMonthDay(yearInfo, offset int) (month, day int, isLeapMonth bool) {
 	return
 }
 
-func calcDays(yearInfo, month, day int, isLeapMonth bool) (offset int) {
+func calcDays(yearInfo, month, day int, isLeapMonth bool) (offset int, err error) {
+	if month < 1 || month > 12 {
+		return 0, ErrMonthOutOfRange
+	}
 	for _, yii := range enumMonth(yearInfo) {
 		if month == yii.Month && isLeapMonth == yii.IsLeapMonth {
+			if day <= 0 || day > yii.Days {
+				return 0, ErrDayOutOfRange
+			}
 			offset += day - 1
 			return
 		}
 		offset += yii.Days
 	}
-	panic("invalid param")
-	return
+	return 0, ErrNotLeapMonth
 }
 
 func enumMonth(yearInfo int) (res []yearInfoItem) {
