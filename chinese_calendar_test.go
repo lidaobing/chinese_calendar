@@ -13,11 +13,11 @@ type yearInfo2YearDayTest struct {
 }
 
 var yearInfo2YearDayTests = []yearInfo2YearDayTest{
-	yearInfo2YearDayTest{0, 348},                // no leap month, and every month has 29 days
-	yearInfo2YearDayTest{1, 377},                // 1 leap month, and every month has 29 days.
-	yearInfo2YearDayTest{(1<<12 - 1) * 16, 360}, // no leap month, and every month has 30 days.
-	yearInfo2YearDayTest{(1<<13-1)*16 + 1, 390}, // 1 leap month, and every month has 30 days.
-	yearInfo2YearDayTest{(1<<12-1)*16 + 1, 389}, // 1 leap month, and every normal month has 30 days, and leap month has 29 days.
+	{0, 348},                // no leap month, and every month has 29 days
+	{1, 377},                // 1 leap month, and every month has 29 days.
+	{(1<<12 - 1) * 16, 360}, // no leap month, and every month has 30 days.
+	{(1<<13-1)*16 + 1, 390}, // 1 leap month, and every month has 30 days.
+	{(1<<12-1)*16 + 1, 389}, // 1 leap month, and every normal month has 30 days, and leap month has 29 days.
 }
 
 func TestYearInfo_TotalDays(t *testing.T) {
@@ -35,7 +35,7 @@ type fromOffsetTest struct {
 }
 
 var fromOffsetTests = []fromOffsetTest{
-	fromOffsetTest{0, ChineseCalendar{1900, 1, 1, false}},
+	{0, ChineseCalendar{1900, 1, 1, false}},
 }
 
 func TestFromOffset(t *testing.T) {
