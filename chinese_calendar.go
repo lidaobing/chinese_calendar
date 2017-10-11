@@ -1,4 +1,4 @@
-// The chinesecalendar package provide support conversion between chinese calendar and time.Time
+// Package chinese_calendar provide support conversion between chinese calendar and time.Time
 //
 // for more information on Chinese Calendar: http://en.wikipedia.org/wiki/Chinese_calendar
 //
@@ -134,10 +134,10 @@ type yearInfo struct {
 }
 
 // return the total days of the year
-func (self yearInfo) TotalDays() int {
+func (yi yearInfo) TotalDays() int {
 	var res = 29 * 12
 	var leap = 0
-	var yearInfo = self.info
+	var yearInfo = yi.info
 	if yearInfo%16 != 0 {
 		leap = 1
 		res += 29

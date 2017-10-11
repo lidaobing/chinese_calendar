@@ -142,7 +142,7 @@ func TestFromTime(t *testing.T) {
 	t1 = MustFromTime(time.Date(2050, time.January, 22, 23, 59, 59, 0, time.Local))
 	assert.Equal(t, t1, ChineseCalendar{2049, 12, 29, false})
 
-	t1, err = FromTime(time.Date(2050, time.January, 23, 0, 0, 0, 0, time.Local))
+	_, err = FromTime(time.Date(2050, time.January, 23, 0, 0, 0, 0, time.Local))
 	assert.Equal(t, err, ErrTimeOutOfRange)
 }
 
