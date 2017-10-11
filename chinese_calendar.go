@@ -254,7 +254,6 @@ func calcMonthDay(yearInfo, offset int) (month, day int, isLeapMonth bool) {
 		offset -= yii.Days
 	}
 	panic("offset too large for the yearInfo")
-	return
 }
 
 func calcDays(yearInfo, month, day int, isLeapMonth bool) (offset int, err error) {
