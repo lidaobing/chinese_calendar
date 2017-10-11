@@ -2,8 +2,8 @@
 
 https://github.com/lidaobing/chinese_calendar
 
-[![Build Status](https://travis-ci.org/lidaobing/chinese_calendar.png?branch=master)](https://travis-ci.org/lidaobing/chinese_calendar)
-[![GitHub version](https://badge.fury.io/gh/lidaobing%2Fchinese_calendar.png)](http://badge.fury.io/gh/lidaobing%2Fchinese_calendar)
+[![Build Status](https://travis-ci.org/lidaobing/chinese_calendar.svg?branch=master)](https://travis-ci.org/lidaobing/chinese_calendar)
+[![GitHub version](https://badge.fury.io/gh/lidaobing%2Fchinese_calendar.svg)](http://badge.fury.io/gh/lidaobing%2Fchinese_calendar)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lidaobing/chinese_calendar)](https://goreportcard.com/report/github.com/lidaobing/chinese_calendar)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
