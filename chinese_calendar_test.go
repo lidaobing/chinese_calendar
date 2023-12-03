@@ -46,10 +46,27 @@ func TestFromOffset(t *testing.T) {
 	}
 }
 
+type fromSolarDateTest struct {
+	solarYear  int
+	solarMonth int
+	solarDay   int
+	lunarYear  int
+	lunarMonth int
+	lunarDay   int
+	isLeap     bool
+}
+
+var fromSolarDateTests = []fromSolarDateTest{
+	{1976, 10, 1, 1976, 8, 8, true},
+	{1956, 12, 2, 1956, 11, 1, false},
+}
+
 func TestFromSolarDate(t *testing.T) {
-	t1, err := FromSolarDate(1976, 10, 1)
-	assert.NoError(t, err)
-	assert.Equal(t, t1, ChineseCalendar{1976, 8, 8, true})
+	for _, item := range fromSolarDateTests {
+		t1, err := FromSolarDate(item.solarYear, item.solarMonth, item.solarDay)
+		assert.NoError(t, err)
+		assert.Equal(t, t1, ChineseCalendar{item.lunarYear, item.lunarMonth, item.lunarDay, item.isLeap})
+	}
 }
 
 func TestChineseCalendar_Validate(t *testing.T) {
